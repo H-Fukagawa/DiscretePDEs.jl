@@ -1,4 +1,5 @@
-using DotEnv, Pkg
+using Pkg
+using DotEnv
 
 """
 See README.md for build notes.
