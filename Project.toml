@@ -17,7 +17,7 @@ UniqueVectors = "2fbcfb34-fd0c-5fbb-b5d7-e826d8f5b0a9"
 
 [compat]
 julia = "1.5 - 1.11"
-DotEnv = "0.8-1.2"
+# DotEnv = "0.8-1.2"
 AdmittanceModels = "0.2"
 
 
