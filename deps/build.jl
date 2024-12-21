@@ -6,7 +6,8 @@ See README.md for build notes.
 
 env = joinpath(@__DIR__, ".env")
 run(`touch $env`) # make sure .env file exists
-DotEnv.config(path=env)
+DotEnv.load(env)
+
 env_keys = ["gmshjl", "PYTHON"]
 
 # configure gmsh
