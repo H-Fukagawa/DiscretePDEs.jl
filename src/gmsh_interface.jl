@@ -2,7 +2,7 @@ using DiscreteExteriorCalculus: Point, Simplex, TriangulatedComplex
 using UniqueVectors: UniqueVector
 using DotEnv
 
-DotEnv.config(path=joinpath(@__DIR__, "../deps/.env"))
+DotEnv.load(joinpath(@__DIR__, "../deps/.env"))
 include(ENV["gmshjl"]) # include the gmsh module used below
 
 export initialize!
