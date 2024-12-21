@@ -6,7 +6,7 @@ See README.md for build notes.
 """
 
 env = joinpath(@__DIR__, ".env")
-run(`touch $env`) # make sure .env file exists
+# run(`touch $env`) # make sure .env file exists
 DotEnv.load(env)
 
 env_keys = ["gmshjl", "PYTHON"]
