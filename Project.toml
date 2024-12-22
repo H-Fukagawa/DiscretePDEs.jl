@@ -16,9 +16,14 @@ Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 UniqueVectors = "2fbcfb34-fd0c-5fbb-b5d7-e826d8f5b0a9"
 
 [compat]
-julia = "1.5 - 1.11"
-# DotEnv = "0.8-1.2"
+julia = "1.5 - 1.12"
+DotEnv = "1.0 - 1.1"
+DiscreteExteriorCalculus = "0.2"
+Combinatorics = "0.7 - 1.2"
+StaticArrays = "1.0 - 1.9"
 AdmittanceModels = "0.2"
+UniqueVectors = "1.2"
+
 
 
 [extras]
