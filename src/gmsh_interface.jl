@@ -78,6 +78,7 @@ function get_simplex_node_tags(K::Int, tag::Int=-1)
     return simplex_node_tags
 end
 
+"""
 function get_simplices(K::Int, node_tags::AbstractVector{Int},
     points::AbstractVector{Point{N}}, tag::Int=-1) where N
     simplex_node_tags = get_simplex_node_tags(K, tag)
@@ -85,6 +86,34 @@ function get_simplices(K::Int, node_tags::AbstractVector{Int},
         for nt in simplex_node_tags[:, i]]) for i in 1:size(simplex_node_tags, 2)]
     return simplices
 end
+"""
+
+function get_simplices(K::Int, node_tags::AbstractVector{Int},
+                      points::AbstractVector{Point{N}}, tag::Int=-1) where N
+    simplex_node_tags = get_simplex_node_tags(K, tag)
+    
+    # タグからインデックスへのマッピングを作成
+    tag_to_index = Dict(nt => i for (i, nt) in enumerate(node_tags))
+    
+    # シンプルックスを生成
+    simplices = []
+    for i in 1:size(simplex_node_tags, 2)
+        simplex_points = []
+        for nt in simplex_node_tags[:, i]
+            if haskey(tag_to_index, nt)
+                push!(simplex_points, points[tag_to_index[nt]])
+            else
+                error("タグ $nt が `node_tags` に見つかりません。")
+            end
+        end
+        push!(simplices, Simplex(simplex_points))
+    end
+    return simplices
+end
+
+
+
+
 
 export get_triangulated_complex
 """
