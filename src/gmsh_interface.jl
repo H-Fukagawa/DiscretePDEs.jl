@@ -2,8 +2,8 @@ using DiscreteExteriorCalculus: Point, Simplex, TriangulatedComplex
 using UniqueVectors: UniqueVector
 using DotEnv
 
-env = joinpath(@__DIR__, ".env")
-open(env, "a") do io
+env = joinpath(@__DIR__, "../deps/.env")
+# open(env, "a") do io
 DotEnv.load(env)
 include(ENV["gmshjl"]) # include the gmsh module used below
 
@@ -147,4 +147,3 @@ function add_field!(name::String, node_tags::AbstractVector{Int},
     gmsh.view.addModelData(view_tag, 0, "", "NodeData", node_tags, [[x] for x in scalar_field])
     return view_tag
 end
-
