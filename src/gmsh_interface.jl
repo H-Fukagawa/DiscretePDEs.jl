@@ -84,13 +84,7 @@ function get_simplex_node_tags(K::Int, tag::Int=-1)
 end
 
 
-function get_simplices(K::Int, node_tags::AbstractVector{Int},
-    points::AbstractVector{Point{N}}, tag::Int=-1) where N
-    simplex_node_tags = get_simplex_node_tags(K, tag)
-    simplices = [Simplex([points[findfirst(isequal(nt), node_tags)]
-        for nt in simplex_node_tags[:, i]]) for i in 1:size(simplex_node_tags, 2)]
-    return simplices
-end
+
 
 
 function get_simplices(K::Int, node_tags::AbstractVector{Int},
