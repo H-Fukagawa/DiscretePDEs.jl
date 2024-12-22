@@ -1,6 +1,7 @@
 using DiscreteExteriorCalculus: Point, Simplex, TriangulatedComplex
 using UniqueVectors: UniqueVector
 using DotEnv
+using Gmsh
 
 env = joinpath(@__DIR__, "../deps/.env")
 open(env, "a") do io
