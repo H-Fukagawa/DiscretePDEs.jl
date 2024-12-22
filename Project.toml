@@ -14,6 +14,8 @@ PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
 SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 UniqueVectors = "2fbcfb34-fd0c-5fbb-b5d7-e826d8f5b0a9"
+Gmsh = "705231aa-382f-11e9-3f0c-b7cb4346fdeb"
+
 
 [compat]
 julia = "1.5 - 1.12"
@@ -23,6 +25,8 @@ DiscreteExteriorCalculus = "0.1 - 0.2"
 # StaticArrays = "1.0 - 1.9"
 AdmittanceModels = "0.2"
 UniqueVectors = "1.1"
+Gmsh = "0.3"
+
 
 
 
