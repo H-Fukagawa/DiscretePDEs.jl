@@ -84,27 +84,40 @@ function get_simplex_node_tags(K::Int, tag::Int=-1)
 end
 
 function get_simplices(K::Int, node_tags::AbstractVector{Int},
-                      points::AbstractVector{Point{N}}, tag::Int=-1) where N
+                       points::AbstractVector{Point{N}}, 
+                       tag::Int=-1) where N
+    # Gmsh から取得した要素 (node_tags...) を整形
     simplex_node_tags = get_simplex_node_tags(K, tag)
-    
-    # タグからインデックスへのマッピングを作成
+
+    # ノードタグ→ポイント配列のインデックス変換
     tag_to_index = Dict(nt => i for (i, nt) in enumerate(node_tags))
-    
-    # シンプルックスを生成
-    simplices = []
+
+    # 出力するシンプルックスの配列
+    simplices = Vector{Simplex{N, _}}()  # 型パラメータはお任せでもOK
+
+    # 要素数だけループ
     for i in 1:size(simplex_node_tags, 2)
-        simplex_points = []
+
+        # ★ ここで "要素型が Point{N}" の配列だと明示
+        simplex_points = Vector{Point{N}}()
+
+        # 各要素が持つノードタグを走査
         for nt in simplex_node_tags[:, i]
             if haskey(tag_to_index, nt)
+                # 該当ノードタグに対応するポイントを push!
                 push!(simplex_points, points[tag_to_index[nt]])
             else
                 error("タグ $nt が `node_tags` に見つかりません。")
             end
         end
+
+        # "simplex_points::Vector{Point{N}}" なので、Simplex(::AbstractVector{Point{N}}) が呼べる
         push!(simplices, Simplex(simplex_points))
     end
+
     return simplices
 end
+
 
 export get_triangulated_complex
 """
