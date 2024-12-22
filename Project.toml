@@ -17,12 +17,12 @@ UniqueVectors = "2fbcfb34-fd0c-5fbb-b5d7-e826d8f5b0a9"
 
 [compat]
 julia = "1.5 - 1.12"
-DotEnv = "1.0 - 1.1"
+DotEnv = "1.0"
 DiscreteExteriorCalculus = "0.1 - 0.2"
 # Combinatorics = "0.7 - 1.2"
 # StaticArrays = "1.0 - 1.9"
 AdmittanceModels = "0.2"
-UniqueVectors = "1.2"
+UniqueVectors = "1.1"
 
 
 
