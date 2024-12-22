@@ -13,19 +13,6 @@ function find_gmshjl()
     end
 end
 
-# gmsh.jl を探し、なければ gmsh のインストールスクリプトを実行
-value = find_gmshjl()
-if value == ""
-    # Gmsh のインストール
-    install_gmsh_sh = joinpath(@__DIR__, "install_gmsh.sh")
-    run(`bash $install_gmsh_sh`)
-
-    value = find_gmshjl()
-    @assert value != ""  "gmsh.jl が見つかりません。インストールに失敗した可能性があります。"
-end
-
-println("gmsh.jl path: $value")
-
 
 ##
 # Python / Conda の設定
