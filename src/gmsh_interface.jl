@@ -93,7 +93,7 @@ function get_simplices(K::Int, node_tags::AbstractVector{Int},
     tag_to_index = Dict(nt => i for (i, nt) in enumerate(node_tags))
 
     # 出力するシンプルックスの配列
-    simplices = Vector{Simplex{N, _}}()  # 型パラメータはお任せでもOK
+    simplices = Vector{Simplex{N, val}}()  # 型パラメータはお任せでもOK
 
     # 要素数だけループ
     for i in 1:size(simplex_node_tags, 2)
