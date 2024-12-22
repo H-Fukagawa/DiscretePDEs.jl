@@ -12,7 +12,7 @@ open(env, "a") do io
 end  # do ブロックを閉じる
 
 # .env ファイルをロード
-DotEnv.load(env)
+DotEnv.load!(env)
 
 env_keys = ["gmshjl", "PYTHON"]
 
