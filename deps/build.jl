@@ -1,70 +1,68 @@
-using Pkg
 using DotEnv
 
 env = joinpath(@__DIR__, ".env")
 
 # .env ファイルを追加モードで開き、存在しない場合は作成
 open(env, "a") do io
-    # ここではファイルが存在するかどうかを確認するために何も書き込まない
-    # 必要に応じて初期内容をここに追加できます
+    # 必要な環境変数をここに書き込む
+    # 例:
+    # println(io, "gmshjl=/usr/local/gmsh.jl")
+    # println(io, "PYTHON=/usr/bin/python3")
 end  # do ブロックを閉じる
 
 # .env ファイルをロード
-DotEnv.load!(env)
+DotEnv.load(env)
 
 env_keys = ["gmshjl", "PYTHON"]
 
-# configure gmsh
-find_gmshjl() =
-    try # search for gmsh.jl in /usr/local/
-        path = read(pipeline(`find /usr/local/ -name "gmsh.jl"`, `head -n 1`), String)
-        path[1:end-1]
-    catch
-        ""
-    end
+# Gmshの設定
+find_gmshjl() = try
+    path = read(pipeline(`find /usr/local/ -name "gmsh.jl"`, `head -n 1`), String)
+    path[1:end-1]
+catch
+    ""
+end
 
 key = env_keys[1]
 if !(key in keys(ENV))
     value = find_gmshjl()
     if value == ""
-        # install gmsh
+        # Gmshのインストール
         install_gmsh_sh = joinpath(@__DIR__, "install_gmsh.sh")
         run(`bash $install_gmsh_sh`)
         value = find_gmshjl()
-       # @assert value != ""
+        @assert value != ""
     end
     ENV[key] = value
     println("$key=$value")
 end
 
-# configure python
-find_conda() =
-    try # use conda in $PATH
-        path = read(`which conda`, String)
-        path[1:end-1]
-    catch
-        try # check if miniconda3 is already in home directory
-            path = joinpath(homedir(), "miniconda3", "bin", "conda")
-            run(`test -f $path`) # check if file exists
-            path
-        catch
-            ""
-        end
-    end
-
-find_python(conda::String) =
+# Pythonの設定
+find_conda() = try
+    path = read(`which conda`, String)
+    path[1:end-1]
+catch
     try
-        path = read(pipeline(`$conda env list`, `grep DiscretePDEs`, `awk '{print $2}'`), String)
-        joinpath(path[1:end-1], "bin", "python")
+        path = joinpath(homedir(), "miniconda3", "bin", "conda")
+        run(`test -f $path`) # ファイルの存在を確認
+        path
     catch
         ""
     end
+end
+
+find_python(conda::String) = try
+    path = read(pipeline(`$conda env list`, `grep DiscretePDEs`, `awk '{print $2}'`), String)
+    joinpath(path[1:end-1], "bin", "python")
+catch
+    ""
+end
 
 key = env_keys[2]
 if !(key in keys(ENV))
     conda = find_conda()
     if conda == ""
-        # install conda
+        # Condaのインストール
         install_conda_sh = joinpath(@__DIR__, "install_conda.sh")
         run(`bash $install_conda_sh`)
         conda = find_conda()
@@ -72,7 +70,7 @@ if !(key in keys(ENV))
     end
     value = find_python(conda)
     if value == ""
-        # create a virtual environment
+        # 仮想環境の作成
         conda_env_yml = joinpath(@__DIR__, "conda_env.yml")
         run(`$conda env create -f $conda_env_yml`)
         value = find_python(conda)
@@ -84,7 +82,7 @@ end
 
 Pkg.build("PyCall")
 
-# save to .env
+# .env ファイルに保存
 env_contents = reduce(*, ["$k=$(ENV[k])\n" for k in env_keys])
 open(env, "w") do io
     write(io, env_contents)
