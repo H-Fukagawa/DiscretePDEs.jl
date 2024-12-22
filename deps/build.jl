@@ -1,90 +1,88 @@
 using Pkg
-using DotEnv
 
-env = joinpath(@__DIR__, ".env")
-
-# .env ファイルを追加モードで開き、存在しない場合は作成
-open(env, "a") do io
-    # 必要な環境変数をここに書き込む
-    # 例:
-    # println(io, "gmshjl=/usr/local/share/julia/DiscretePDEs/gmsh.jl")
-    # println(io, "PYTHON=/Users/hiroki/miniconda3/envs/DiscretePDEs/bin/python")
-end  # do ブロックを閉じる
-
-# .env ファイルをロード
-DotEnv.load!(env)
-
-env_keys = ["gmshjl", "PYTHON"]
-
+##
 # Gmshの設定
-find_gmshjl() = try
-    path = read(pipeline(`find /usr/local/ -name "gmsh.jl"`, `head -n 1`), String)
-    path[1:end-1]
-catch
-    ""
-end
-
-key = env_keys[1]
-if !(key in keys(ENV))
-    value = find_gmshjl()
-    if value == ""
-        # Gmshのインストール
-        install_gmsh_sh = joinpath(@__DIR__, "install_gmsh.sh")
-        run(`bash $install_gmsh_sh`)
-        value = find_gmshjl()
-        @assert value != ""
-    end
-    ENV[key] = value
-    println("$key=$value")
-end
-
-# Pythonの設定
-find_conda() = try
-    path = read(`which conda`, String)
-    path[1:end-1]
-catch
+##
+function find_gmshjl()
     try
-        path = joinpath(homedir(), "miniconda3", "bin", "conda")
-        run(`test -f $path`) # ファイルの存在を確認
-        path
+        # /usr/local/ 直下を検索し、最初に見つかった gmsh.jl のパスを取得
+        path = read(pipeline(`find /usr/local/ -name "gmsh.jl"`, `head -n 1`), String)
+        return path[1:end-1]
     catch
-        ""
+        return ""
     end
 end
 
-find_python(conda::String) = try
-    path = read(pipeline(`$conda env list`, `grep DiscretePDEs`, `awk '{print $2}'`), String)
-    joinpath(path[1:end-1], "bin", "python")
-catch
-    ""
+# gmsh.jl を探し、なければ gmsh のインストールスクリプトを実行
+value = find_gmshjl()
+if value == ""
+    # Gmsh のインストール
+    install_gmsh_sh = joinpath(@__DIR__, "install_gmsh.sh")
+    run(`bash $install_gmsh_sh`)
+
+    value = find_gmshjl()
+    @assert value != ""  "gmsh.jl が見つかりません。インストールに失敗した可能性があります。"
 end
 
-key = env_keys[2]
-if !(key in keys(ENV))
+println("gmsh.jl path: $value")
+
+
+##
+# Python / Conda の設定
+##
+function find_conda()
+    try
+        # システムにある conda のパスを which で取得
+        path = read(`which conda`, String)
+        return path[1:end-1]
+    catch
+        try
+            # もし which conda で見つからない場合は、ホームディレクトリにある miniconda3/bin/conda を探す
+            path = joinpath(homedir(), "miniconda3", "bin", "conda")
+            run(`test -f $path`)  # 存在確認
+            return path
+        catch
+            return ""
+        end
+    end
+end
+
+function find_python(conda::String)
+    try
+        # DiscretePDEs という名前の conda 環境を検索し、そこからパスを取得
+        path = read(pipeline(`$conda env list`, `grep DiscretePDEs`, `awk '{print $2}'`), String)
+        return joinpath(path[1:end-1], "bin", "python")
+    catch
+        return ""
+    end
+end
+
+conda = find_conda()
+if conda == ""
+    # conda が見つからなければ、miniconda をインストール
+    install_conda_sh = joinpath(@__DIR__, "install_conda.sh")
+    run(`bash $install_conda_sh`)
+
     conda = find_conda()
-    if conda == ""
-        # Condaのインストール
-        install_conda_sh = joinpath(@__DIR__, "install_conda.sh")
-        run(`bash $install_conda_sh`)
-        conda = find_conda()
-        @assert conda != ""
-    end
-    value = find_python(conda)
-    if value == ""
-        # 仮想環境の作成
-        conda_env_yml = joinpath(@__DIR__, "conda_env.yml")
-        run(`$conda env create -f $conda_env_yml`)
-        value = find_python(conda)
-        @assert value != ""
-    end
-    ENV[key] = value
-    println("$key=$value")
+    @assert conda != "" "conda が見つかりません。インストールに失敗した可能性があります。"
 end
 
+py_path = find_python(conda)
+if py_path == ""
+    # DiscretePDEs という環境が見つからなければ、新規に conda_env.yml から環境を作成
+    conda_env_yml = joinpath(@__DIR__, "conda_env.yml")
+    run(`$conda env create -f $conda_env_yml`)
+
+    py_path = find_python(conda)
+    @assert py_path != "" "Python 環境が見つかりません。conda_env.yml の環境作成に失敗した可能性があります。"
+end
+
+println("Python path: $py_path")
+
+
+##
+# PyCall のビルド
+##
 Pkg.build("PyCall")
 
-# .env ファイルに保存
-env_contents = reduce(*, ["$k=$(ENV[k])\n" for k in env_keys])
-open(env, "w") do io
-    write(io, env_contents)
-end  # do ブロックを閉じる
+println("ビルド完了: PyCall および gmsh のセットアップが完了しました。")
