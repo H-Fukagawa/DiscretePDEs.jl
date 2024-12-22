@@ -1,13 +1,16 @@
 using DiscreteExteriorCalculus: Point, Simplex, TriangulatedComplex
 using UniqueVectors: UniqueVector
-using DotEnv
 using Gmsh
 
-env = joinpath(@__DIR__, "../deps/.env")
-open(env, "a") do io
-end  # do ブロックを閉じる
-DotEnv.load!(env)
-include(ENV["gmshjl"]) # include the gmsh module used below
+# -------------------------------------------------
+# 削除した部分
+# 
+# env = joinpath(@__DIR__, "../deps/.env")
+# open(env, "a") do io
+# end
+# DotEnv.load!(env)
+# include(ENV["gmshjl"]) # include the gmsh module used below
+# -------------------------------------------------
 
 export initialize!
 """
@@ -80,8 +83,6 @@ function get_simplex_node_tags(K::Int, tag::Int=-1)
     return simplex_node_tags
 end
 
-
-
 function get_simplices(K::Int, node_tags::AbstractVector{Int},
                       points::AbstractVector{Point{N}}, tag::Int=-1) where N
     simplex_node_tags = get_simplex_node_tags(K, tag)
@@ -104,10 +105,6 @@ function get_simplices(K::Int, node_tags::AbstractVector{Int},
     end
     return simplices
 end
-
-
-
-
 
 export get_triangulated_complex
 """
