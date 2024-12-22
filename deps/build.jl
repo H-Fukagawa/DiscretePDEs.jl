@@ -1,12 +1,12 @@
-using Pkg
-using DotEnv
-
-"""
-See README.md for build notes.
-"""
-
 env = joinpath(@__DIR__, ".env")
-open(env, "a") do io # make sure .env file exists
+
+# .env ファイルを追加モードで開き、存在しない場合は作成
+open(env, "a") do io
+    # ここではファイルが存在するかどうかを確認するために何も書き込まない
+    # 必要に応じて初期内容をここに追加できます
+end  # do ブロックを閉じる
+
+# .env ファイルをロード
 DotEnv.load(env)
 
 env_keys = ["gmshjl", "PYTHON"]
@@ -19,6 +19,7 @@ find_gmshjl() =
     catch
         ""
     end
+
 key = env_keys[1]
 if !(key in keys(ENV))
     value = find_gmshjl()
@@ -47,14 +48,15 @@ find_conda() =
             ""
         end
     end
+
 find_python(conda::String) =
     try
-        path = read(pipeline(`$conda env list`, `grep DiscretePDEs`, `awk '{print $2}'`),
-            String)
+        path = read(pipeline(`$conda env list`, `grep DiscretePDEs`, `awk '{print $2}'`), String)
         joinpath(path[1:end-1], "bin", "python")
     catch
         ""
     end
+
 key = env_keys[2]
 if !(key in keys(ENV))
     conda = find_conda()
@@ -76,10 +78,11 @@ if !(key in keys(ENV))
     ENV[key] = value
     println("$key=$value")
 end
+
 Pkg.build("PyCall")
 
 # save to .env
 env_contents = reduce(*, ["$k=$(ENV[k])\n" for k in env_keys])
 open(env, "w") do io
     write(io, env_contents)
-end
+end  # do ブロックを閉じる
