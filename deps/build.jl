@@ -1,3 +1,6 @@
+using Pkg
+using DotEnv
+
 env = joinpath(@__DIR__, ".env")
 
 # .env ファイルを追加モードで開き、存在しない場合は作成
