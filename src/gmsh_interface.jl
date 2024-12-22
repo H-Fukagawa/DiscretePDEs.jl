@@ -3,7 +3,8 @@ using UniqueVectors: UniqueVector
 using DotEnv
 
 env = joinpath(@__DIR__, "../deps/.env")
-# open(env, "a") do io
+open(env, "a") do io
+end  # do ブロックを閉じる
 DotEnv.load!(env)
 include(ENV["gmshjl"]) # include the gmsh module used below
 
