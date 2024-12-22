@@ -4,7 +4,7 @@ using DotEnv
 
 env = joinpath(@__DIR__, "../deps/.env")
 # open(env, "a") do io
-DotEnv.load(env)
+DotEnv.load!(env)
 include(ENV["gmshjl"]) # include the gmsh module used below
 
 export initialize!
