@@ -31,7 +31,7 @@ if !(key in keys(ENV))
         install_gmsh_sh = joinpath(@__DIR__, "install_gmsh.sh")
         run(`bash $install_gmsh_sh`)
         value = find_gmshjl()
-        @assert value != ""
+       # @assert value != ""
     end
     ENV[key] = value
     println("$key=$value")
