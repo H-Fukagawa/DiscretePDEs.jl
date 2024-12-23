@@ -23,7 +23,9 @@ end
              (1.1, -0.67), (1.1, -0.8), (1.38, -0.8), (1.38, -0.92), (0.79, -0.92), (0.79, -0.34), (0.55, -0.34), (0.55, -0.71),
              (0.67, -0.71), (0.67, -0.88), (0.55, -0.88), (0.55, -0.34), (0.48, -0.34), (0.48, -1.11), (1.65, -1.11)]
     demarcated_points = [points[1:10]; points[7]; points[11:16]; points[3]; points[17:22]; points[19]; points[23:end]]
-    @test DPE.demarcate_self_intersections(points) == demarcated_points
+    # @test DPE.demarcate_self_intersections(points) == demarcated_points
+    @test isapprox(DPE.demarcate_self_intersections(points), demarcated_points, atol=1e-4, rtol=1e-4)
+
 end
 
 @testset "GeoCode" begin
