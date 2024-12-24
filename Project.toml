@@ -24,7 +24,7 @@ DiscreteExteriorCalculus = "0.1 - 0.2"
 # Combinatorics = "0.7 - 1.2"
 # StaticArrays = "1.0 - 1.9"
 AdmittanceModels = "0.2"
-UniqueVectors = "1.1"
+UniqueVectors = "1.2"
 Gmsh = "0.3"
 
 
