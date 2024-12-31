@@ -144,12 +144,12 @@ function electrodynamics_pso(m::Metric{N}, mesh::Mesh{N, K},
     return pso, sparse_nullbasis(constraint)
 end
 
-electrodynamics_pso(m::Metric{N}, mesh::Mesh{N, K},
-    sources::AbstractVector{<:AbstractVector{Cell{N}}},
-    boundary::CellComplex{N},
-    μ⁻::AbstractVector{<:Real}, Λ⁻::AbstractVector{<:Real},
-    σ::AbstractVector{<:Real}, ϵ::AbstractVector{<:Real}) where {N, K} =
-    electrodynamics_pso(m, mesh, sources, boundary.cells[1], boundary.cells[2], μ⁻, Λ⁻, σ, ϵ)
+# electrodynamics_pso(m::Metric{N}, mesh::Mesh{N, K},
+    # sources::AbstractVector{<:AbstractVector{Cell{N}}},
+    # boundary::CellComplex{N},
+    # μ⁻::AbstractVector{<:Real}, Λ⁻::AbstractVector{<:Real},
+    # σ::AbstractVector{<:Real}, ϵ::AbstractVector{<:Real}) where {N, K} =
+    # electrodynamics_pso(m, mesh, sources, boundary.cells[1], boundary.cells[2], μ⁻, Λ⁻, σ, ϵ)
 
 export solve_statics
 """
