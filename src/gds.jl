@@ -171,7 +171,7 @@ function GeoCode(cell::PyObject;
     # flattening ensures all are PolygonSet objects
     # elements = cell.copy("cell_name").flatten().elements
     # Julia + PyCall の場合 (キーアクセスはシンボルで行う)
-    new_cell = cell[:copy]()
+    new_cell = cell[:copy]("cell_name")
     new_cell[:flatten]()
 
     # polygons と paths をそれぞれ取り出し、まとめる
