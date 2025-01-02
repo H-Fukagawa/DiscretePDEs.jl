@@ -169,7 +169,7 @@ function GeoCode(cell::PyObject;
     layer_volume_groups::Dict{String, <:AbstractVector{Int}}=Dict{String, Vector{Int}}(),
     layer_mesh_size::Dict{Int, <:Real}=Dict{Int, Float64}())
     # flattening ensures all are PolygonSet objects
-    elements = cell.copy(cell_name).flatten().elements
+    elements = cell.copy("cell_name").flatten().elements
     geo_code = GeoCode()
     surface_group_layers = unique(vcat(values(layer_surface_groups)...))
     volume_group_layers = unique(vcat(values(layer_volume_groups)...))
