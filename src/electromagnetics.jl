@@ -137,7 +137,7 @@ function electrodynamics_pso(m::Metric{N}, mesh::Mesh{N, K},
     row_inds = vcat([[findfirst(isequal(c), comp.cells[k]) for c in s] for s in sources]...)
     col_inds = vcat([[i for _ in s] for (i, s) in enumerate(sources)]...)
     P = sparse(row_inds, col_inds, ones(length(row_inds)), length(comp.cells[k]), length(sources))
-    pso = PSOModel(K₀ + K₁, G, C, P, P, collect(1:length(sources)))
+    pso = PSOModel(K₀ + K₁, G, C, P, collect(1:length(sources)))
     interior_inds = findall(i -> !(comp.cells[1][i] in boundary_points), 1:length(comp.cells[1]))
     d★ϵ_constraint = (d * C/maximum(abs.(ϵ)))[interior_inds, :] # only enforce d★ϵA = 0 in the interior
     constraint = vcat(zero_constraint(comp, boundary_edges, k), d★ϵ_constraint)
