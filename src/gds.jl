@@ -169,7 +169,22 @@ function GeoCode(cell::PyObject;
     layer_volume_groups::Dict{String, <:AbstractVector{Int}}=Dict{String, Vector{Int}}(),
     layer_mesh_size::Dict{Int, <:Real}=Dict{Int, Float64}())
     # flattening ensures all are PolygonSet objects
-    elements = cell.copy("cell_name").flatten().elements
+    # elements = cell.copy("cell_name").flatten().elements
+    # Julia + PyCall の場合 (キーアクセスはシンボルで行う)
+    new_cell = cell[:copy]()
+    new_cell[:flatten]()
+
+    # polygons と paths をそれぞれ取り出し、まとめる
+    polygons = new_cell[:polygons]
+    paths    = new_cell[:paths]
+
+    # 必要なら labels や references なども取り出す
+    labels = new_cell[:labels]
+    refs   = new_cell[:references]
+
+    # 一括で扱いたいなら結合
+    elements = vcat(polygons, paths)
+    
     geo_code = GeoCode()
     surface_group_layers = unique(vcat(values(layer_surface_groups)...))
     volume_group_layers = unique(vcat(values(layer_volume_groups)...))
