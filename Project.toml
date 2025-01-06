@@ -15,7 +15,7 @@ SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 UniqueVectors = "2fbcfb34-fd0c-5fbb-b5d7-e826d8f5b0a9"
 Gmsh = "705231aa-382f-11e9-3f0c-b7cb4346fdeb"
-
+Combinatorics = "861a8166-3701-5b0c-9a16-15d98fcdc6aa"
 
 [compat]
 julia = "1.5 - 1.12"
