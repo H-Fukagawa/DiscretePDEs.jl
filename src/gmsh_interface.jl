@@ -85,7 +85,7 @@ end
 
 
 
-
+export get_simplices
 
 function get_simplices(K::Int, node_tags::AbstractVector{Int},
                        points::AbstractVector{Point{N}}, 
